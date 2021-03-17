@@ -21,4 +21,12 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+
+
+Route::resource('posts', PostController::class);
+
+//Route::get('/main', [MainPageController::class])
+
+// Route::get('types/{type}',TypeController::class)->name('types.show');
+
 require __DIR__.'/auth.php';
