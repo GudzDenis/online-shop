@@ -8,7 +8,9 @@
 
 @foreach($types as $type)
     id: {{$type->id}} name: {{$type->type}} 
+    <ul>
     @foreach ($type->posts as $post)
-        => {{$post->title}}<br>    
+        <li>{{$post->title}}</li><br>    
     @endforeach
+    </ul>
 @endforeach
