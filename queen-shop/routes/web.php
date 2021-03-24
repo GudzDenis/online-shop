@@ -25,6 +25,8 @@ Route::get('/dashboard', function () {
 
 Route::resource('posts', PostController::class);
 
+Route::resource('types', TypeController::class);
+
 //Route::get('/main', [MainPageController::class])
 
 // Route::get('types/{type}',TypeController::class)->name('types.show');
