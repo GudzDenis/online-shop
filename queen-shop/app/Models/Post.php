@@ -8,6 +8,12 @@ use App\Models\type;
 
 class Post extends Model
 {
+    protected $fillable = [
+        'title',
+        'description',
+        'price',
+    ];
+
     public function types()
     {
         return $this->belongsTo(type::class);

@@ -74,7 +74,17 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $request->validate([
+            'title' => 'required|unique:posts|max:255',
+            'description' => 'required',
+            'price' => 'required|integer'
+            
+        ]);
+
+        $post->fill( $request->all() );
+        $post->save();
+
+        return redirect('posts');
     }
 
     /**
