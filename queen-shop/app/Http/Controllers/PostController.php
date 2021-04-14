@@ -15,7 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('types')->get();
+        $posts = Post::with('types')->paginate(2);
 
         $types = type::with('posts')->get();
 
