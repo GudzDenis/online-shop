@@ -29,7 +29,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
@@ -40,7 +40,34 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $types = Type::with('posts')->get();
+
+        $res = false;
+
+        foreach( $types as $type )
+        {
+            if( $type->title == $request->input('type') )
+            {
+                $res = true;
+                break;
+            }
+        }
+
+        if(!$res)
+        {
+            return view('posts.create');
+        }
+
+        $request->validate([
+            'title' => 'required|unique:posts|max:255',
+            'description' => 'required',
+            'price' => 'required|integer',
+        ]);
+
+
+
+        return redirect('posts');
     }
 
     /**
@@ -62,7 +89,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('posts.edit', ['post' => $post]);
+        $types = Type::with('posts')->get();
+
+        return view('posts.edit', ['post' => $post, 'types' => $types]);
     }
 
     /**
@@ -77,8 +106,7 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|unique:posts|max:255',
             'description' => 'required',
-            'price' => 'required|integer'
-            
+            'price' => 'required|integer',
         ]);
 
         $post->fill( $request->all() );
@@ -95,6 +123,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect('posts.index');
     }
 }

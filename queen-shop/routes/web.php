@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Post;
+use App\Models\Type;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +16,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+
+    $posts = Post::with('types')->paginate(2);
+    $types = Type::with('posts')->get();
+
+    return view('posts/index', ['posts' => $posts, 'types' =>$types]);
 });
 
 Route::get('/dashboard', function () {
@@ -26,6 +32,9 @@ Route::get('/dashboard', function () {
 Route::resource('posts', PostController::class);
 
 Route::resource('types', TypeController::class);
+
+Route::delete('posts/{id}', [PostController::class, 'destroy'])
+  ->name('posts.destroy');
 
 //Route::get('/main', [MainPageController::class])
 

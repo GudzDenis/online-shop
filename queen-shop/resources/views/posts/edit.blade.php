@@ -1,3 +1,7 @@
+@extends('layouts.app')
+
+@section('content')
+
 <form method="POST" action = "{{ route( 'posts.update', $post)}}">
     @csrf
     @method('PUT')
@@ -6,3 +10,5 @@
     <input type = "number" name = "price" value = "{{$post->price}}"/><br/>
     <button>Edit</button>
 </form>
+
+@endsection
