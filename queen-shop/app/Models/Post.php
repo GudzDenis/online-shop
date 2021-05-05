@@ -12,6 +12,7 @@ class Post extends Model
         'title',
         'description',
         'price',
+        'type_id',
     ];
 
     public function types()

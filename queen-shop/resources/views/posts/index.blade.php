@@ -8,7 +8,9 @@
               <h1 class="fw-light">Shop</h1>
               <p class="lead text-muted"></p>
               <p>
-                <a href = "{{ route('posts.create') }}"  class="btn btn-primary my-2">Add</a>
+                @if($user && $user->name == "admin")
+                  <a href = "{{ route('posts.create') }}"  class="btn btn-primary my-2">Add</a>
+                @endif
                 <a href="#" class="btn btn-secondary my-2">Secondary action</a>
               </p>
             </div>
@@ -29,12 +31,15 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group">
                                             <a href = "{{ route('posts.show', $post) }}" class="btn btn-sm btn-outline-secondary">View</a>
-                                            <a href = "{{ route('posts.edit', $post) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
-                                            <form method = "POST" action = "{{ route('posts.destroy', $post)}}">
-                                              @csrf
-                                              @method('DELETE')
-                                              <button type = "submit" class="btn btn-sm btn-outline-secondary">Delete</button>
-                                            </form>
+                                            @if ($user &&  $user->name == "admin")
+                                              <a href = "{{ route('posts.edit', $post) }}" class="btn btn-sm btn-outline-secondary">Edit</a>                                                                                            
+                                              
+                                              <form method = "POST" action = "{{ route('posts.destroy', $post)}}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type = "submit" class="btn btn-sm btn-outline-secondary">Delete</button>
+                                              </form>
+                                            @endif
                                         </div>
                                         <small class="text-muted">{{ $post->price }} hrn</small>
                                     </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\type;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -16,10 +17,10 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::with('types')->paginate(2);
-
+        $user = Auth::user();
         $types = type::with('posts')->get();
 
-        return view('posts.index', ['posts' => $posts, 'types' =>$types]);
+        return view('posts.index', ['posts' => $posts, 'types' =>$types, 'user' =>$user]);
     }
 
     /**
@@ -29,7 +30,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        $types = Type::with('posts')->get();
+
+        return view('posts.create', ['types' => $types]);
     }
 
     /**
@@ -40,15 +43,17 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        
         $types = Type::with('posts')->get();
 
         $res = false;
 
+        $storeType;
+
         foreach( $types as $type )
         {
-            if( $type->title == $request->input('type') )
+            if( !( strcasecmp($type->type, $request->input('type') ) ) )
             {
+                $storeType = $type->id;
                 $res = true;
                 break;
             }
@@ -56,7 +61,7 @@ class PostController extends Controller
 
         if(!$res)
         {
-            return view('posts.create');
+            return view('posts.create',  ['types' => $types]);
         }
 
         $request->validate([
@@ -65,7 +70,9 @@ class PostController extends Controller
             'price' => 'required|integer',
         ]);
 
-
+        $data = $request->all();
+        $data['type_id'] = $storeType;
+        $post = Post::create($data);
 
         return redirect('posts');
     }
@@ -78,7 +85,9 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('posts.show', ['post' => $post]);
+        $types = Type::with('posts')->get();
+
+        return view('posts.show', ['post' => $post, 'types' => $types]);
     }
 
     /**
@@ -124,6 +133,6 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
-        return redirect('posts.index');
+        return redirect('posts');
     }
 }

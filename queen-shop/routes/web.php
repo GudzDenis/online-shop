@@ -16,17 +16,17 @@ use App\Models\Type;
 */
 
 Route::get('/', function () {
-
-    $posts = Post::with('types')->paginate(2);
-    $types = Type::with('posts')->get();
-
-    return view('posts/index', ['posts' => $posts, 'types' =>$types]);
+  
+  $posts = Post::with('types')->paginate(2);
+  $types = Type::with('posts')->get();
+  $user = Auth::user();
+    return view('posts/index', ['posts' => $posts, 'types' =>$types, 'user' =>$user]);
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+   $user = Auth::user();
+    return view('dashboard', ['user' => $user]);
 })->middleware(['auth'])->name('dashboard');
-
 
 
 Route::resource('posts', PostController::class);
@@ -39,5 +39,6 @@ Route::delete('posts/{id}', [PostController::class, 'destroy'])
 //Route::get('/main', [MainPageController::class])
 
 // Route::get('types/{type}',TypeController::class)->name('types.show');
+
 
 require __DIR__.'/auth.php';
