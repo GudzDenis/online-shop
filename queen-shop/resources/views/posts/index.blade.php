@@ -8,10 +8,26 @@
               <h1 class="fw-light">Shop</h1>
               <p class="lead text-muted"></p>
               <p>
-                @if($user && $user->name == "admin")
-                  <a href = "{{ route('posts.create') }}"  class="btn btn-primary my-2">Add</a>
+                @if($user && $user->email == "dengudz04@gmail.com")
+                  <a href = "{{ route('posts.create') }}"  class="btn btn-primary my-2">Add</a><br/>
                 @endif
-                <a href="#" class="btn btn-secondary my-2">Secondary action</a>
+                <h1 class="fw-light">Filter</h1>
+                <form method = "GET" action = "{{ route('posts.index')}}">
+                  @csrf
+                  <input name = "title" type = "text" placeholder = "Title"/>
+                  <select name = "type">
+                    <option></option>
+                    @foreach($types as $type)
+
+                        <option>{{$type->type}}</option>
+                    @endforeach
+                  </select><br/>                  
+
+                  <input name = "price_from" type = "number" placeholder = "Price(from)"/>
+                  <input name = "price_to" type = "number" placeholder = "Price(to)"/><br/>
+
+                  <button class="btn btn-primary my-2">Show</button>
+                </form>
               </p>
             </div>
           </div>
@@ -31,7 +47,7 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group">
                                             <a href = "{{ route('posts.show', $post) }}" class="btn btn-sm btn-outline-secondary">View</a>
-                                            @if ($user &&  $user->name == "admin")
+                                            @if ($user &&  $user->email == "dengudz04@gmail.com")
                                               <a href = "{{ route('posts.edit', $post) }}" class="btn btn-sm btn-outline-secondary">Edit</a>                                                                                            
                                               
                                               <form method = "POST" action = "{{ route('posts.destroy', $post)}}">

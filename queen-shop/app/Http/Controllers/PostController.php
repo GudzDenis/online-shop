@@ -16,9 +16,40 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('types')->paginate(2);
+        $searchTitle = request('title', '');
+        $searchType = request('type', '');
+        $searchPriceFrom = request('price_from', 0);
+        $searchPriceTo = request('price_to', 0);
+
+        //dd($searchTitle);
+
+        $posts = Post::with('types');
+        $types = type::with('posts');
+
+        if( $searchTitle != '')
+        {
+            $posts = $posts->where('posts.title', 'like', '%'.$searchTitle.'%' );
+        }
+
+        if( $searchType != '')
+        {
+            $id = $types->select('types.id')->where('type', $searchType)->get()[0]->id;
+            $posts = $posts->where( 'type_id', $id );
+        }
+
+        if( $searchPriceFrom )
+        {
+            $posts = $posts->where('price','>', $searchPriceFrom);
+        }
+
+        if( $searchPriceTo )
+        {
+            $posts = $posts->where('price','<', $searchPriceTo);
+        }
+
+        $posts = $posts->paginate(2);
+        $types = $types->get();
         $user = Auth::user();
-        $types = type::with('posts')->get();
 
         return view('posts.index', ['posts' => $posts, 'types' =>$types, 'user' =>$user]);
     }
