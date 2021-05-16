@@ -20,5 +20,10 @@ class Post extends Model
         return $this->belongsTo(type::class);
     }
 
+    public function sizes()
+    {
+        return $this->hasMany(Size::class);
+    }
+
     use HasFactory;
 }

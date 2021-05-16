@@ -57,7 +57,7 @@
                                               </form>
                                             @endif
                                         </div>
-                                        <small class="text-muted">{{ $post->price }} hrn</small>
+                                        <small class="text-muted">{{ $post->price/100 }} hrn</small>
                                     </div>
                                 </div>
                             </div>

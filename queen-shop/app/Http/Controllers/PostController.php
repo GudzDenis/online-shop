@@ -80,6 +80,7 @@ class PostController extends Controller
 
         $storeType;
 
+
         foreach( $types as $type )
         {
             if( !( strcasecmp($type->type, $request->input('type') ) ) )
@@ -95,15 +96,34 @@ class PostController extends Controller
             return view('posts.create',  ['types' => $types]);
         }
 
+        if( !$sizes )
+        {
+            return view('posts.create',  ['types' => $types]);
+        }
+
         $request->validate([
             'title' => 'required|unique:posts|max:255',
             'description' => 'required',
             'price' => 'required|integer',
         ]);
 
-        $data = $request->all();
-        $data['type_id'] = $storeType;
-        $post = Post::create($data);
+
+        $sizes = [];
+
+        for( $i = 385; $i<=480; $i+=5)
+        {
+            $size = $request->input("$i");
+            if( $size != NULL)
+            {
+                array_push($sizes, $size);
+            }
+        }
+
+        $post = Post::create(
+            ["title"=>$request->input('title'),
+            "description"=>$request->input('description'),
+            "price"=>$request->input('price'),
+            "type_id"=>$storeType]);
 
         return redirect('posts');
     }

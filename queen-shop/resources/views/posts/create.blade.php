@@ -12,6 +12,10 @@
             <option>{{$type->type}}</option>
         @endforeach
     <select>
+    <br/>
+    @for ( $i = 385; $i <= 480; $i+=5 )
+        {{$i/10}}<input type = "checkbox" value = "{{$i/10}}" name = "{{$i}}"/><br/>
+    @endfor
     <button type ="submit">Add</button>
 </form>
 @endsection

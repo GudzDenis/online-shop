@@ -23,6 +23,31 @@ Route::get('/', function () {
     return view('posts/index', ['posts' => $posts, 'types' =>$types, 'user' =>$user]);
 });
 
+Route::get('/posts/create', function(){
+  $user = Auth::user();
+  if($user && !strcmp($user->email,"dengudz04@gmail.com"))
+  {
+    return view('posts/create');
+  }  
+  else
+  {
+    return abort(404);
+  }
+});
+
+Route::get('/posts/{id}/edit', function($id){
+  $user = Auth::user();
+  if($user && !strcmp($user->email,"dengudz04@gmail.com"))
+  {
+    $post = Post::with('types')->get()[$id-1];
+    return view("posts/edit", ['post'=>$post]);
+  }
+  else
+  {
+    return abort(404);
+  }
+});
+
 Route::get('/dashboard', function () {
    $user = Auth::user();
     return view('dashboard', ['user' => $user]);
